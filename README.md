@@ -1,5 +1,6 @@
 # MyCloud 个人云盘
 
+### [原python后端](https://github.com/ChenjxJames/MyWebSite)
 ### 采用了前后端分离的网络架构，前端使用ajax发送包含json格式参数的请求。后端同样使用json格式的数据响应。
 ### 后端使用SpringBoot Hibernate MySql 编写
 ### 前端使用JQuery3 font-awesome bootstrap3 jquery.md5.js
@@ -10,7 +11,7 @@
 | interceptor层 | 拦截非法请求（没登陆的请求）|
 | controller层 | 处理用户请求 |
 | service层	| 整合dao层方法供controller层调用 |
-| dao层 | 连接数据库 |
+| dao层 | 操作数据库 |
 | model层 | 实体类（实体类与数据表对应） |
 | utils层 |	工具类（这里我写了一些文件处理的静态方法） |
 | vo层 | (value object)将model类的数据包装为前端所需的数据 |
