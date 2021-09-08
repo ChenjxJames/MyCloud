@@ -1,0 +1,372 @@
+{
+	"info": {
+		"_postman_id": "39be7f29-f313-44c2-b7cf-ea4fabd18c1e",
+		"name": "cloud",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"cjx\",\r\n    \"password\": \"202cb962ac59075b964b07152d234b70\",\r\n    \"email\": \"cjx@test.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/user/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"cjx\",\r\n    \"password\": \"202cb962ac59075b964b07152d234b70\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/user/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getInfo",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/user/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "logout",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/user/logout",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "file",
+			"item": [
+				{
+					"name": "getFileList",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"folderId\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/cloud/",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cloud",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getFileListByFileId",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"folderId\": 0,\r\n    \"fileIdList\": [4,5]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/cloud/byfileid",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cloud",
+								"byfileid"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getFileIdList",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"folderId\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/cloud/fileid",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cloud",
+								"fileid"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update filename",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n    \"fileId\": 4,\r\n    \"folderId\": 0,\r\n    \"fileName\": \"111\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/cloud/update",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cloud",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "move",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n    \"fileIdList\": [4 ,5],\r\n    \"folderId\": 0,\r\n    \"newFolderId\": 6\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/cloud/move",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cloud",
+								"move"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n    \"fileIdList\": [4 ,5],\r\n    \"folderId\": 6\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/cloud/delete",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cloud",
+								"delete"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createFolder",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n    \"fileName\": \"文件夹2\",\r\n    \"folderId\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/cloud/createFolder",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cloud",
+								"createFolder"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "upload",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"value": "文件本体",
+									"type": "text"
+								},
+								{
+									"key": "folderId",
+									"value": "0",
+									"type": "text"
+								},
+								{
+									"key": "fileName",
+									"value": "文件名(不带后缀)",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8080/cloud/upload",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cloud",
+								"upload"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "download",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/cloud/download/{fileId}",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cloud",
+								"download",
+								"{fileId}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

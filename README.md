@@ -16,6 +16,9 @@
 | utils层 |	工具类（这里我写了一些文件处理的静态方法） |
 | vo层 | (value object)将model类的数据包装为前端所需的数据 |
 
+### API接口设计
+使用Postman打开[API接口文档](./doc/cloud.postman_collection.json)查看
+
 ### 数据库设计
 #### 用户信息表 user
 | 字段名 | 类型 | 长度 | 约束 | 备注 |
