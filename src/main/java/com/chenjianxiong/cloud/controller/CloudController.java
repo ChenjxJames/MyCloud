@@ -6,25 +6,26 @@ import com.chenjianxiong.cloud.service.FileService;
 import com.chenjianxiong.cloud.vo.Result;
 import com.chenjianxiong.cloud.model.User;
 import com.chenjianxiong.cloud.vo.UserFileVo;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.util.*;
 
 /**
- * @author ：
- * @date ：Created in 2020/6/9 0:35
- * @description：
+ * @author :
+ * @date :
+ * @description : 文件控制类
  */
 @RequestMapping(value = "/cloud")
 @Controller
 public class CloudController {
-    @Autowired
+    @Resource
     private FileService fileService;
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
@@ -104,15 +105,15 @@ public class CloudController {
         return result;
     }
 
-    @RequestMapping(value = "/download/{fileId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/download/{folderId}/{fileId}", method = RequestMethod.GET)
     @ResponseBody
-    public Result download(@PathVariable("fileId") Integer fileId, HttpSession session, HttpServletResponse response) {
+    public Result download(@PathVariable("folderId") Integer folderId, @PathVariable("fileId") Integer fileId, HttpSession session, HttpServletResponse response) {
         Result result = new Result(-30, "文件信息获取失败，请稍后尝试。");
         try {
             User user = (User) session.getAttribute("USER_LOGIN");
             int userId = user.getId();
             System.out.println("download: user_" + userId + " file_" + fileId);
-            UserFileVo userFileVo = this.fileService.download(userId, fileId);
+            UserFileVo userFileVo = this.fileService.download(userId, fileId, folderId);
             if (userFileVo != null) {
                 File file = new File(userFileVo.getPath());
                 if(file.exists()){ //判断文件父目录是否存在

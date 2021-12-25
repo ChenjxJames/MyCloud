@@ -11,9 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
- * @author ：
- * @date ：Created in 2020/6/15 15:53
- * @description：
+ * @author :
+ * @date :
+ * @description :
  */
 public interface UserFileRepository extends JpaRepository<UserFile, Integer> {
 
@@ -26,8 +26,8 @@ public interface UserFileRepository extends JpaRepository<UserFile, Integer> {
     @Query(value = "SELECT uf FROM UserFile uf WHERE user_id=:userId AND folder_id=:folderId AND (file_id in (:fileIdList))")
     public List<UserFile> findByFileIdList(@Param("userId") int userId, @Param("folderId") int folderId, @Param("fileIdList") List<Integer> fileIdList);
 
-    @Query(value = "SELECT uf FROM UserFile uf WHERE user_id=:userId AND file_id=:fileId")
-    public UserFile findByFileId(@Param("userId") int userId, @Param("fileId") int fileId);
+    @Query(value = "SELECT uf FROM UserFile uf WHERE user_id=:userId AND file_id=:fileId AND folder_id=:folderId")
+    public UserFile findByFileId(@Param("userId") int userId, @Param("fileId") int fileId, @Param("folderId") int folderId);
 
     @Query(value = "SELECT uf FROM UserFile uf WHERE user_id=:userId AND folder_id=:folderId AND file_name=:fileName")
     public UserFile findByFileName(@Param("userId") int userId, @Param("folderId") int folderId, @Param("fileName") String fileName);

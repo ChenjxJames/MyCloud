@@ -1,9 +1,9 @@
 package com.chenjianxiong.cloud.vo;
 
 /**
- * @author ：
- * @date ：Created in 2020/6/14 2:51
- * @description：Response data object
+ * @author :
+ * @date :
+ * @description : Response data object
  */
 public class Result {
     private Integer state;

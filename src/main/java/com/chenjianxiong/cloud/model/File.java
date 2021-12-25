@@ -7,9 +7,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 /**
- * @author ：
- * @date ：Created in 2020/6/14 23:22
- * @description：文件模型类
+ * @author :
+ * @date :
+ * @description : 文件模型类
  */
 @Entity
 @DynamicUpdate

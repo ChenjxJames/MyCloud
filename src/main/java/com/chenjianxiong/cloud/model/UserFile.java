@@ -7,9 +7,9 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @author ：
- * @date ：Created in 2020/6/15 15:37
- * @description：用户文件关联模型类
+ * @author :
+ * @date :
+ * @description : 用户文件关联模型类
  */
 @Entity
 @DynamicUpdate

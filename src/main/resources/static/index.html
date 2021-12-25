@@ -34,16 +34,16 @@
         </div>
         <div class="menu menu-opt" id="all_file"><h4 class="text-center">全部文件</h4></div>
         <div class="menu" id="my_share"><h4 class="text-center">我的分享</h4></div>
+        <div class="menu" id="share_to_me"><h4 class="text-center">分享给我的</h4></div>
         <div class="line"></div>
         <div class="menu" id="about"><h4 class="text-center">关于MyCloud</h4></div>
         <br>
     </div>
 </div>
 <div class="col-xs-12 col-sm-9 col-md-9 col-lg-10" id="main_right">
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="display: inline;"
-         id="main_right_file_nav">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="display: inline;">
         <div id="file_nav">
-            <div class="file-nav-left">
+            <div class="file-nav-left" id="main_right_file_nav">
                 <button class="btn btn-default" type="button" id="btnUpload">
                     <sapn class="fa fa-cloud-upload" style="color: #2980ff;"></sapn>
                     上传
@@ -78,15 +78,27 @@
                                 <sapn class="fa fa-navicon" style="color: #2980ff;padding-right: 8px;"></sapn>
                                 详情</a></li>
                             <li role="separator" class="divider"></li>
-                            <li><a id="other_menu_share_file">
-                                <sapn class="fa fa-share-alt" style="color: #2980ff;padding-right: 8px;"></sapn>
-                                分享</a></li>
+                            <li>
+                                <a id="other_menu_share_file">
+                                    <sapn class="fa fa-share-alt" style="color: #2980ff;padding-right: 8px;"></sapn>
+                                    分享
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </div>
                 <button class="btn btn-default" style="display: none;" type="button" id="btnPaste">
                     <sapn class="fa fa-paste" style="color: #2980ff;"></sapn>
                     粘贴
+                </button>
+            </div>
+            <div class="file-nav-left" id="main_right_share_nav" style="display: none;">
+                <button class="btn btn-default" style="color: #2980ff" type="button" id="btnNewShare">
+                    <sapn class="fa fa-plus"></sapn>
+                    新建
+                </button>
+                <button class="btn btn-default" style="color: #2980ff" type="button" id="btnDelShare">
+                    删除分享
                 </button>
             </div>
             <div class="file-nav-right">
@@ -118,18 +130,6 @@
                 </a>
             </div>
             <div id="file_path_inner"></div>
-        </div>
-    </div>
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="display: none;"
-         id="main_right_share_nav">
-        <div>
-            <button class="btn btn-default" style="color: #2980ff" type="button" id="btnNewShare">
-                <sapn class="fa fa-plus"></sapn>
-                新建
-            </button>
-            <button class="btn btn-default" style="color: #2980ff" type="button" id="btnDelShare">
-                删除分享
-            </button>
         </div>
     </div>
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="main_right_content">
@@ -206,6 +206,34 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" onclick="modalHide();">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="showShareModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" onclick="modalHide();" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">分享</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group" id="share_file_form">
+                    <label for="share_user">分享给</label>
+                    <input type="text" class="form-control" maxlength="64" id="share_user" placeholder="请输入用户名">
+                    <label for="share_user_role">权限</label>
+                    <select class="form-control" id="share_user_role">
+                        <option value="0" selected>仅查看</option>
+                        <option value="1">编辑者</option>
+                        <option value="2">管理员</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" onclick="modalHide();">关闭</button>
+                <button type="button" class="btn btn-primary" id="btn_share_file_submit">确定</button>
             </div>
         </div>
     </div>

@@ -52,9 +52,17 @@
 | 字段名 | 类型 | 长度 | 约束 | 备注 |
 | --- | --- | --- | --- | --- |
 | file_id | INT	| |非空，文件表file的外键，与share_user、create_user一同为主键	| 文件id |
-| filename | VARCHAR | 255 | 非空 | 文件名 |
 | share_user | INT | | 非空，用户表user的外键 | 被分享者的用户id |
+| share_user_role | INT | | 非空 | 被分享用户的角色（0仅查看，1编辑者，2管理员）|
 | create_user | INT	| | 非空，用户表user的外键 | 分享者的用户id |
+| create_time | DATETIME | | 非空 | 创建时间，自动生成 |
+
+#### 日志信息表 log
+| 字段名 | 类型 | 长度 | 约束 | 备注 |
+| --- | --- | --- | --- | --- |
+| log_id | INT	| |非空，主键	| 日志id |
+| log_content | VARCHAR | 255 | 非空 | 日志内容 |
+| user_id | INT	| | 非空，用户表user的外键 | 用户id |
 | create_time | DATETIME | | 非空 | 创建时间，自动生成 |
 
 ### 运行效果

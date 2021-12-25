@@ -7,9 +7,9 @@ import org.springframework.data.repository.query.Param;
 
 
 /**
- * @author ：
- * @date ：Created in 2020/6/14 1:11
- * @description：
+ * @author :
+ * @date :
+ * @description:
  */
 public interface UserRepository extends JpaRepository<User, Integer> {
 

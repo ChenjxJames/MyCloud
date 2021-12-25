@@ -1,7 +1,6 @@
 package com.chenjianxiong.cloud.service.impl;
 
 import com.chenjianxiong.cloud.dao.FileRepository;
-import com.chenjianxiong.cloud.dao.FileShareRepository;
 import com.chenjianxiong.cloud.dao.UserFileRepository;
 import com.chenjianxiong.cloud.model.File;
 import com.chenjianxiong.cloud.model.UserFile;
@@ -10,30 +9,27 @@ import com.chenjianxiong.cloud.service.FileService;
 import com.chenjianxiong.cloud.utils.FileUtils;
 import com.chenjianxiong.cloud.vo.Result;
 import com.chenjianxiong.cloud.vo.UserFileVo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 /**
- * @author ：
- * @date ：Created in 2020/6/15 19:07
- * @description：
+ * @author :
+ * @date :
+ * @description :
  */
 @Service
 public class FileServiceImpl implements FileService {
 
-    @Autowired
+    @Resource
     private FileRepository fileRepository;
 
-    @Autowired
+    @Resource
     private UserFileRepository userFileRepository;
-
-    @Autowired
-    private FileShareRepository fileShareRepository;
 
     @Override
     public UserFileVo createFolder(int userId, int folderId, String fileName) {
@@ -73,8 +69,8 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public UserFileVo download(int userId, int fileId) {
-        UserFile userFile = this.userFileRepository.findByFileId(userId, fileId);
+    public UserFileVo download(int userId, int fileId, int folderId) {
+        UserFile userFile = this.userFileRepository.findByFileId(userId, fileId, folderId);
         if (userFile != null) {
             File file = this.fileRepository.findByFileId(fileId);
             return new UserFileVo(userFile, file);

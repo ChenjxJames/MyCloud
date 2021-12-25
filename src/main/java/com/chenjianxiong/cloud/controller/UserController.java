@@ -3,23 +3,24 @@ package com.chenjianxiong.cloud.controller;
 import com.chenjianxiong.cloud.model.User;
 import com.chenjianxiong.cloud.service.UserService;
 import com.chenjianxiong.cloud.vo.Result;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.Map;
 
 /**
- * @author ：
- * @date ：Created in 2020/6/14 17:18
- * @description：用户控制类
+ * @author :
+ * @date :
+ * @description : 用户控制类
  */
 @RequestMapping(value = "/user")
 @Controller
 public class UserController {
-    @Autowired
+    @Resource
     private UserService userService;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)

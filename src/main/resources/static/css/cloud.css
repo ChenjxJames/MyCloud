@@ -114,7 +114,6 @@ button {
 #main_right_share_nav {
     height: 60px;
     padding: 13px 20px 13px 20px;
-    border-bottom: 1px solid #AAAAAA;
 }
 
 #main_right_content {
@@ -262,4 +261,17 @@ button {
         transform: scaleY(1.0);
         -webkit-transform: scaleY(1.0);
     }
+}
+
+#share_file_form {
+    display: flex;
+    align-items: center;
+    padding: 30px 15px;
+}
+
+#share_file_form > label {
+    display: inline-block;
+    margin: 0;
+    padding: 0 10px;
+    width: 150px;
 }

@@ -5,12 +5,14 @@ import javax.persistence.Embeddable;
 import java.io.Serializable;
 
 /**
- * @author ：
- * @date ：Created in 2020/6/16 1:34
- * @description：
+ * @author :
+ * @date :
+ * @description :
  */
 @Embeddable
 public class FileSharePrimaryKey implements Serializable {
+    @Column(name = "folder_id")
+    private int folderId;
     @Column(name = "file_id")
     private int fileId;
     @Column(name = "share_user")
@@ -22,10 +24,19 @@ public class FileSharePrimaryKey implements Serializable {
 
     }
 
-    public FileSharePrimaryKey(int fileId, int shareUser, int createUser) {
+    public FileSharePrimaryKey(int folderId, int fileId, int shareUser, int createUser) {
+        this.folderId = folderId;
         this.fileId = fileId;
         this.shareUser = shareUser;
         this.createUser = createUser;
+    }
+
+    public int getFolderId() {
+        return folderId;
+    }
+
+    public void setFolderId(int folderId) {
+        this.folderId = folderId;
     }
 
     public int getFileId() {
@@ -55,6 +66,7 @@ public class FileSharePrimaryKey implements Serializable {
     @Override
     public String toString() {
         return "FileSharePrimaryKey{" +
+                "folderId=" + folderId +
                 "fileId=" + fileId +
                 ", shareUser=" + shareUser +
                 ", createUser=" + createUser +

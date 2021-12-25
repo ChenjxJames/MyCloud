@@ -3,17 +3,19 @@ package com.chenjianxiong.cloud.service.impl;
 import com.chenjianxiong.cloud.dao.UserRepository;
 import com.chenjianxiong.cloud.model.User;
 import com.chenjianxiong.cloud.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+
 /**
- * @author ：
- * @date ：Created in 2020/6/14 1:17
- * @description：
+ * @author :
+ * @date :
+ * @description :
  */
 @Service
 public class UserServiceImpl implements UserService {
-    @Autowired
+    @Resource
     private UserRepository userRpy;
 
     public User register(User user) {

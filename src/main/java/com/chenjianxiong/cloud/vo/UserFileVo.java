@@ -6,9 +6,9 @@ import com.chenjianxiong.cloud.model.UserFile;
 import java.util.Date;
 
 /**
- * @author ：
- * @date ：Created in 2020/6/16 22:49
- * @description：
+ * @author :
+ * @date :
+ * @description :
  */
 public class UserFileVo {
 

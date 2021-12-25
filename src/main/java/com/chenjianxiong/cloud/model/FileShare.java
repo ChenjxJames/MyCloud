@@ -7,9 +7,9 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @author ：
- * @date ：Created in 2020/6/15 15:43
- * @description：文件分享模型类
+ * @author :
+ * @date :
+ * @description : 文件分享模型类
  */
 @Entity
 @DynamicUpdate
@@ -18,8 +18,9 @@ public class FileShare implements Serializable {
     @EmbeddedId
     private FileSharePrimaryKey id;
 
-    @Column(name = "file_name")
-    private String fileName;
+    @Column(name = "share_user_role")
+    private int shareUserRole;
+
     @Column(name = "create_time")
     private Date createTime;
 
@@ -27,9 +28,9 @@ public class FileShare implements Serializable {
 
     }
 
-    public FileShare(FileSharePrimaryKey id, String fileName, Date createTime) {
+    public FileShare(FileSharePrimaryKey id, int shareUserRole, Date createTime) {
         this.id = id;
-        this.fileName = fileName;
+        this.shareUserRole = shareUserRole;
         this.createTime = createTime;
     }
 
@@ -41,12 +42,12 @@ public class FileShare implements Serializable {
         this.id = id;
     }
 
-    public String getFileName() {
-        return fileName;
+    public int getShareUserRole() {
+        return shareUserRole;
     }
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
+    public void setShareUserRole(int shareUserRole) {
+        this.shareUserRole = shareUserRole;
     }
 
     public Date getCreateTime() {
@@ -61,7 +62,7 @@ public class FileShare implements Serializable {
     public String toString() {
         return "FileShare{" +
                 "id=" + id +
-                ", fileName='" + fileName + '\'' +
+                ", shareUserRole='" + shareUserRole + '\'' +
                 ", createTime=" + createTime +
                 '}';
     }

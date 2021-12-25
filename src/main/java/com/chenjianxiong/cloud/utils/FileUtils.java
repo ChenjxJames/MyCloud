@@ -10,9 +10,9 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 
 /**
- * @author ：
- * @date ：Created in 2020/6/18 4:37
- * @description：
+ * @author :
+ * @date :
+ * @description :
  */
 public class FileUtils {
 
@@ -37,7 +37,7 @@ public class FileUtils {
     }
 
     public static String upload(MultipartFile file, String fileName) throws Exception {
-        String path = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\upload\\" + fileName;
+        String path = System.getProperty("user.dir") + "/src/main/resources/static/upload/" + fileName;
         java.io.File file2 = new java.io.File(path);
         if (!file2.getParentFile().exists()) {
             boolean createFile = file2.getParentFile().mkdirs();

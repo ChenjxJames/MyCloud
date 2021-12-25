@@ -4,9 +4,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 /**
- * @author ：
- * @date ：Created in 2020/6/14 23:21
- * @description：
+ * @author :
+ * @date :
+ * @description : 首页
  */
 @Controller
 public class IndexController {

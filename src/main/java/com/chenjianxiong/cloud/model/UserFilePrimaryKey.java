@@ -5,9 +5,9 @@ import javax.persistence.Embeddable;
 import java.io.Serializable;
 
 /**
- * @author ：
- * @date ：Created in 2020/6/16 1:31
- * @description：
+ * @author :
+ * @date :
+ * @description :
  */
 @Embeddable
 public class UserFilePrimaryKey  implements Serializable {

@@ -3,22 +3,23 @@ package com.chenjianxiong.cloud.interceptor;
 import com.chenjianxiong.cloud.model.User;
 import com.chenjianxiong.cloud.service.UserService;
 import com.chenjianxiong.cloud.vo.Result;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.PrintWriter;
 
 /**
- * @author ：
- * @date ：Created in 2020/6/14 18:32
- * @description：登录验证拦截器
+ * @author :
+ * @date :
+ * @description:登录验证拦截器
  */
 public class LoginInterceptor implements HandlerInterceptor {
-    @Autowired
+    @Resource
     private UserService userService;
 
     @Override

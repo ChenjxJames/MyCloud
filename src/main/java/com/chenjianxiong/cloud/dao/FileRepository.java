@@ -10,9 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
- * @author ：
- * @date ：Created in 2020/6/15 15:48
- * @description：使用hibernate
+ * @author :
+ * @date :
+ * @description : 使用hibernate
  */
 public interface FileRepository  extends JpaRepository<File, Integer> {
 

@@ -9,9 +9,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 /**
- * @author ：
- * @date ：Created in 2020/6/15 17:43
- * @description：文件服务接口
+ * @author :
+ * @date :
+ * @description : 文件服务接口
  */
 public interface FileService {
 
@@ -19,7 +19,7 @@ public interface FileService {
 
     public Result upload(String fileName, int folderId, int userId, MultipartFile file) throws Exception;
 
-    public UserFileVo download(int userId, int fileId);
+    public UserFileVo download(int userId, int fileId, int folderId);
 
     public UserFile update(UserFile userFile);
 
