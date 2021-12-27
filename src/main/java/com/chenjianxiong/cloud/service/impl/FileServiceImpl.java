@@ -1,10 +1,9 @@
 package com.chenjianxiong.cloud.service.impl;
 
 import com.chenjianxiong.cloud.dao.FileRepository;
+import com.chenjianxiong.cloud.dao.FileShareRepository;
 import com.chenjianxiong.cloud.dao.UserFileRepository;
-import com.chenjianxiong.cloud.model.File;
-import com.chenjianxiong.cloud.model.UserFile;
-import com.chenjianxiong.cloud.model.UserFilePrimaryKey;
+import com.chenjianxiong.cloud.model.*;
 import com.chenjianxiong.cloud.service.FileService;
 import com.chenjianxiong.cloud.utils.FileUtils;
 import com.chenjianxiong.cloud.vo.Result;
@@ -30,6 +29,9 @@ public class FileServiceImpl implements FileService {
 
     @Resource
     private UserFileRepository userFileRepository;
+
+    @Resource
+    private FileShareRepository fileShareRepository;
 
     @Override
     public UserFileVo createFolder(int userId, int folderId, String fileName) {
@@ -69,8 +71,8 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public UserFileVo download(int userId, int fileId, int folderId) {
-        UserFile userFile = this.userFileRepository.findByFileId(userId, fileId, folderId);
+    public UserFileVo download(int fileId, int folderId) {
+        UserFile userFile = this.userFileRepository.findByFileId(fileId, folderId);
         if (userFile != null) {
             File file = this.fileRepository.findByFileId(fileId);
             return new UserFileVo(userFile, file);
@@ -155,8 +157,8 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public List<UserFileVo> getFileInfo(int userId, int folderId, List<Integer> fileIdList) {
-        List<UserFile> userFileList = this.userFileRepository.findByFileIdList(userId, folderId, fileIdList);
+    public List<UserFileVo> getFileInfo(int folderId, List<Integer> fileIdList) {
+        List<UserFile> userFileList = this.userFileRepository.findByFileIdList(folderId, fileIdList);
         return this.getFileInfo(userFileList);
     }
 
@@ -164,5 +166,10 @@ public class FileServiceImpl implements FileService {
     public List<UserFileVo> getFileInfo(int userId, int folderId) {
         List<UserFile> userFileList = this.userFileRepository.findByUserIdAndFolderId(userId, folderId);
         return this.getFileInfo(userFileList);
+    }
+
+    @Override
+    public UserFile getFileById(UserFilePrimaryKey userFilePrimaryKey) {
+        return this.userFileRepository.findById(userFilePrimaryKey);
     }
 }

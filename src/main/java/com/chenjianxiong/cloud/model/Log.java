@@ -9,45 +9,101 @@ import java.util.Date;
 /**
  * @author :
  * @date :
- * @description : 文件分享模型类
+ * @description : 日志模型类
  */
 @Entity
 @DynamicUpdate
-@Table(name = "file_share")
-public class FileShare implements Serializable {
-    @EmbeddedId
-    private FileSharePrimaryKey id;
+@Table(name = "log")
+public class Log implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "log_id")
+    private int id;
 
-    @Column(name = "share_user_role")
-    private int shareUserRole;
+    @Column(name = "folder_id")
+    private int folderId;
+    @Column(name = "file_id")
+    private int fileId;
+    @Column(name = "share_user")
+    private int shareUser;
+    @Column(name = "file_creator_user")
+    private int fileCreatorUser;
+
+    @Column(name = "log_content")
+    private String logContent;
 
     @Column(name = "create_time")
     private Date createTime;
 
-    public FileShare() {
+    public Log() {
 
     }
 
-    public FileShare(FileSharePrimaryKey id, int shareUserRole, Date createTime) {
+    public Log(int folderId, int fileId, int shareUser, int fileCreatorUser, String logContent) {
+        this.folderId = folderId;
+        this.fileId = fileId;
+        this.shareUser = shareUser;
+        this.fileCreatorUser = fileCreatorUser;
+        this.logContent = logContent;
+        this.createTime = new Date();
+    }
+
+    public Log(int id, int folderId, int fileId, int shareUser, int fileCreatorUser, String logContent, Date createTime) {
         this.id = id;
-        this.shareUserRole = shareUserRole;
+        this.folderId = folderId;
+        this.fileId = fileId;
+        this.shareUser = shareUser;
+        this.fileCreatorUser = fileCreatorUser;
+        this.logContent = logContent;
         this.createTime = createTime;
     }
 
-    public FileSharePrimaryKey getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(FileSharePrimaryKey id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public int getShareUserRole() {
-        return shareUserRole;
+    public int getFolderId() {
+        return folderId;
     }
 
-    public void setShareUserRole(int shareUserRole) {
-        this.shareUserRole = shareUserRole;
+    public void setFolderId(int folderId) {
+        this.folderId = folderId;
+    }
+
+    public int getFileId() {
+        return fileId;
+    }
+
+    public void setFileId(int fileId) {
+        this.fileId = fileId;
+    }
+
+    public int getShareUser() {
+        return shareUser;
+    }
+
+    public void setShareUser(int shareUser) {
+        this.shareUser = shareUser;
+    }
+
+    public int getFileCreatorUser() {
+        return fileCreatorUser;
+    }
+
+    public void setFileCreatorUser(int fileCreatorUser) {
+        this.fileCreatorUser = fileCreatorUser;
+    }
+
+    public String getLogContent() {
+        return logContent;
+    }
+
+    public void setLogContent(String logContent) {
+        this.logContent = logContent;
     }
 
     public Date getCreateTime() {
@@ -60,9 +116,13 @@ public class FileShare implements Serializable {
 
     @Override
     public String toString() {
-        return "FileShare{" +
+        return "Log{" +
                 "id=" + id +
-                ", shareUserRole='" + shareUserRole + '\'' +
+                ", folderId=" + folderId +
+                ", fileId=" + fileId +
+                ", shareUser=" + shareUser +
+                ", fileCreatorUser=" + fileCreatorUser +
+                ", logContent='" + logContent + '\'' +
                 ", createTime=" + createTime +
                 '}';
     }

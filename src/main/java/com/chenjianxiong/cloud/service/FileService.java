@@ -19,7 +19,7 @@ public interface FileService {
 
     public Result upload(String fileName, int folderId, int userId, MultipartFile file) throws Exception;
 
-    public UserFileVo download(int userId, int fileId, int folderId);
+    public UserFileVo download(int fileId, int folderId);
 
     public UserFile update(UserFile userFile);
 
@@ -37,7 +37,9 @@ public interface FileService {
 
     public List<UserFileVo> getFileInfo(List<UserFile> userFileList);
 
-    public List<UserFileVo> getFileInfo(int userId, int folderId, List<Integer> fileIdList);
+    public List<UserFileVo> getFileInfo(int folderId, List<Integer> fileIdList);
 
     public List<UserFileVo> getFileInfo(int userId, int folderId);
+
+    public UserFile getFileById(UserFilePrimaryKey userFilePrimaryKey);
 }

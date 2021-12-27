@@ -17,17 +17,23 @@ import java.util.List;
  */
 public interface UserFileRepository extends JpaRepository<UserFile, Integer> {
 
+    @Query(value = "SELECT file_id FROM user_file WHERE folder_id=:folderId", nativeQuery = true)
+    public List<Integer> findFileIdByFolderId(@Param("folderId") int folderId);
+
     @Query(value = "SELECT file_id FROM user_file WHERE user_id=:userId AND folder_id=:folderId", nativeQuery = true)
     public List<Integer> findFileIdByUserIdAndFolderId(@Param("userId") int userId, @Param("folderId") int folderId);
 
     @Query(value = "SELECT file_id FROM user_file WHERE user_id=:userId AND (folder_id in (:folderIdList))", nativeQuery = true)
     public List<Integer> findFileIdByUserIdAndFolderIdList(@Param("userId") int userId, @Param("folderIdList") List<Integer> folderIdList);
 
-    @Query(value = "SELECT uf FROM UserFile uf WHERE user_id=:userId AND folder_id=:folderId AND (file_id in (:fileIdList))")
-    public List<UserFile> findByFileIdList(@Param("userId") int userId, @Param("folderId") int folderId, @Param("fileIdList") List<Integer> fileIdList);
+    @Query(value = "SELECT uf FROM UserFile uf WHERE folder_id=:folderId AND (file_id in (:fileIdList))")
+    public List<UserFile> findByFileIdList(@Param("folderId") int folderId, @Param("fileIdList") List<Integer> fileIdList);
 
     @Query(value = "SELECT uf FROM UserFile uf WHERE user_id=:userId AND file_id=:fileId AND folder_id=:folderId")
     public UserFile findByFileId(@Param("userId") int userId, @Param("fileId") int fileId, @Param("folderId") int folderId);
+
+    @Query(value = "SELECT uf FROM UserFile uf WHERE file_id=:fileId AND folder_id=:folderId")
+    public UserFile findByFileId(@Param("fileId") int fileId, @Param("folderId") int folderId);
 
     @Query(value = "SELECT uf FROM UserFile uf WHERE user_id=:userId AND folder_id=:folderId AND file_name=:fileName")
     public UserFile findByFileName(@Param("userId") int userId, @Param("folderId") int folderId, @Param("fileName") String fileName);
@@ -53,6 +59,4 @@ public interface UserFileRepository extends JpaRepository<UserFile, Integer> {
     public UserFile save(UserFile userFile);
 
     public UserFile findById(UserFilePrimaryKey id);
-
-
 }

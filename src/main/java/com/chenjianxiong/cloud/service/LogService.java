@@ -1,31 +1,20 @@
 package com.chenjianxiong.cloud.service;
 
 import com.chenjianxiong.cloud.model.*;
-import com.chenjianxiong.cloud.vo.FileShareVo;
-import com.chenjianxiong.cloud.vo.UserFileVo;
+import com.chenjianxiong.cloud.vo.LogVo;
 
 import java.util.List;
 
 /**
  * @author :
  * @date :
- * @description : 文件分享服务接口
+ * @description : 日志服务接口
  */
-public interface FileShareService {
+public interface LogService {
 
-    public FileShare share(int folderId, int fileId, User user, User shareUser, int shareUserRole);
+    public void updateFolder(List<Integer> fileIdList, int fileCreatorUser, int folderId, int newFolderId);
 
-    public List<UserFileVo> getByShareList(List<FileShare> fileShareList);
+    public List<LogVo> getFile(int folderId, int fileId, int fileCreatorUser);
 
-    public List<UserFileVo> getMyShare(int userId);
-
-    public List<FileShareVo> getMyShareByUserFile(UserFilePrimaryKey userFilePrimaryKey);
-
-    public List<UserFileVo> getShareToMe(int userId);
-
-    public List<Integer> getFileId(int folderId);
-
-    public boolean delete(List<FileSharePrimaryKey> fileSharePrimaryKeyList);
-
-    public UserFile rename(UserFile userFile);
+    public Log add(Log log);
 }

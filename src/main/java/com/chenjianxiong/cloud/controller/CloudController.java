@@ -53,11 +53,9 @@ public class CloudController {
     public Result getFileInfoByFileIdList(@RequestBody Map<String, Object> map, HttpSession session) {
         Result result = new Result(-30, "文件信息获取失败，请稍后尝试。");
         try {
-            User user = (User) session.getAttribute("USER_LOGIN");
-            int userId = user.getId();
             int folderId = (int) map.get("folderId");
             List<Integer> fileIdList = (List<Integer>) map.get("fileIdList");
-            List<UserFileVo> userFileVoList = this.fileService.getFileInfo(userId, folderId, fileIdList);
+            List<UserFileVo> userFileVoList = this.fileService.getFileInfo(folderId, fileIdList);
             result.setState(0);
             result.setInfo("文件信息获取成功。");
             result.setData(userFileVoList);
@@ -113,7 +111,7 @@ public class CloudController {
             User user = (User) session.getAttribute("USER_LOGIN");
             int userId = user.getId();
             System.out.println("download: user_" + userId + " file_" + fileId);
-            UserFileVo userFileVo = this.fileService.download(userId, fileId, folderId);
+            UserFileVo userFileVo = this.fileService.download(fileId, folderId);
             if (userFileVo != null) {
                 File file = new File(userFileVo.getPath());
                 if(file.exists()){ //判断文件父目录是否存在
@@ -228,7 +226,7 @@ public class CloudController {
         return result;
     }
 
-    @RequestMapping(value = "/createFolder", method = RequestMethod.POST)
+    @RequestMapping(value = "/create_folder", method = RequestMethod.POST)
     @ResponseBody
     public Result createFolder(@RequestBody Map<String, Object> map, HttpSession session) {
         Result result = new Result(-34, "创建文件夹失败，请稍后尝试。");
