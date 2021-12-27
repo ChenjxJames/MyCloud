@@ -92,13 +92,20 @@
                     粘贴
                 </button>
             </div>
-            <div class="file-nav-left" id="main_right_share_nav" style="display: none;">
-                <button class="btn btn-default" style="color: #2980ff" type="button" id="btnNewShare">
-                    <sapn class="fa fa-plus"></sapn>
-                    新建
+            <div class="file-nav-left" id="main_right_share_to_me_nav" style="display: none;">
+                <button class="btn btn-default" style="color: #2980ff; display: none;" type="button" id="btn_share_to_me_info">
+                    <sapn class="fa fa-navicon" style="color: #2980ff;padding-right: 8px;"></sapn>
+                    详情
                 </button>
-                <button class="btn btn-default" style="color: #2980ff" type="button" id="btnDelShare">
-                    删除分享
+            </div>
+            <div class="file-nav-left" id="main_right_share_nav" style="display: none;">
+                <button class="btn btn-default" style="color: #2980ff; display: none;" type="button" id="btn_share_info">
+                    <sapn class="fa fa-navicon" style="color: #2980ff;padding-right: 8px;"></sapn>
+                    详情
+                </button>
+                <button class="btn btn-default" style="color: #2980ff; display: none;" type="button" id="btn_show_log">
+                    <sapn class="fa fa-navicon" style="color: #2980ff;padding-right: 8px;"></sapn>
+                    日志
                 </button>
             </div>
             <div class="file-nav-right">
@@ -147,6 +154,7 @@
             <div class="modal-body">
                 <form id="uploadForm">
                     <br>
+                    <input type="number" name="userId" id="input_user_id" hidden>
                     <div class="input-group">
                         <span class="input-group-addon">文件名</span>
                         <input class="form-control" type="text" maxlength="255" name="fileName" id="filename"
@@ -210,7 +218,38 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="showShareModal" tabindex="-1" role="dialog"
+<div class="modal fade" id="share_info_modal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" onclick="modalHide();" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">分享详情</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>用户名</th>
+                        <th>权限</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody id="file_share_list">
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" onclick="modalHide();">关闭</button>
+                <button type="button" class="btn btn-danger" id="btn_delete_share">删除该分享</button>
+                <button type="button" class="btn btn-success" id="btn_add_share">添加</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="show_share_modal" tabindex="-1" role="dialog"
      aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -221,6 +260,8 @@
             </div>
             <div class="modal-body">
                 <div class="form-group" id="share_file_form">
+                    <input type="number" id="share_file_id" hidden>
+                    <input type="number" id="share_folder_id" hidden>
                     <label for="share_user">分享给</label>
                     <input type="text" class="form-control" maxlength="64" id="share_user" placeholder="请输入用户名">
                     <label for="share_user_role">权限</label>
@@ -234,6 +275,35 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" onclick="modalHide();">关闭</button>
                 <button type="button" class="btn btn-primary" id="btn_share_file_submit">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="log_info_modal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" onclick="modalHide();" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">日志详情</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>用户名</th>
+                        <th>操作</th>
+                        <th>时间</th>
+                    </tr>
+                    </thead>
+                    <tbody id="log_list">
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" onclick="modalHide();">关闭</button>
             </div>
         </div>
     </div>

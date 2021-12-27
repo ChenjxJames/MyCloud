@@ -4,6 +4,8 @@ $(document).ready(function () {
     let optFileIdList = []; // 被选中的文件（夹）id列表，用于文件移动
     let fileIdList = [];
     let pageFileCount =  (Math.floor($("#main_right_content").height()/110)+1) * Math.floor($("#main_right_content").width()/110);
+    let activePage = 'all_file'; // 左侧导航条，当前选中的tab
+    let folderCreatorUserId = 0;
     getUserInfo();
 
     $("#main_right_content").scroll(function(){
@@ -66,27 +68,39 @@ $(document).ready(function () {
 
     // 鼠标点击左侧导航条
     $(".menu").click(function () {
+        $("#main_right_content").empty();
+        showOtherMenu();
+        path = [];
         $(".menu").each(function () {
             $(this).removeClass("menu-opt");
         });
         $(this).addClass("menu-opt");
         if ($(this).attr("id") === "all_file") {
+            activePage = 'all_file';
             $("#main_right_file_nav").css("display", "inline");
-            $("#main_right_share_nav").css("display", "none");
-            path = [];
+            $("#main_right_share_nav").hide();
+            $("#main_right_share_to_me_nav").hide();
             getFlist(0, "全部");
         } else if ($(this).attr("id") === "my_share") {
-            $("#main_right_file_nav").css("display", "none");
+            activePage = 'my_share';
+            $("#main_right_file_nav").hide();
+            $("#main_right_share_to_me_nav").hide();
             $("#main_right_share_nav").css("display", "inline");
+            path.push(newFloder(0, "全部"));
             getShareList();
         } else if ($(this).attr("id") === "share_to_me") {
-            $("#main_right_file_nav").css("display", "inline");
-            $("#main_right_share_nav").css("display", "none");
+            activePage = 'share_to_me';
+            $("#main_right_file_nav").hide();
+            $("#main_right_share_nav").hide();
+            $("#main_right_share_to_me_nav").css("display", "inline");
+            path.push(newFloder(0, "全部"));
             getShareToMeList();
         } else if ($(this).attr("id") === "about") {
-            $("#main_right_file_nav").css("display", "none");
-            $("#main_right_share_nav").css("display", "none");
-            $("#file_path").css("display", "none");
+            activePage = 'about';
+            $("#main_right_file_nav").hide();
+            $("#main_right_share_nav").hide();
+            $("#main_right_share_to_me_nav").hide();
+            $("#file_path").hide();
             getAbout();
         }
     });
@@ -97,14 +111,24 @@ $(document).ready(function () {
     });
 
     // 有文件对象被选中，显示其他选项
-    function showOtherMenu() {
-        if ($(".file-opt").length > 0) {
+    function showOtherMenu(hide = false) {
+        if ($(".file-opt").length > 0 && !hide) {
             $("#optBtns").css("display", "inline");
+            if (getFolderId() === 0) {
+                $("#btn_share_info").css("display", "inline");
+                $("#btn_share_to_me_info").css("display", "inline");
+                $("#btn_show_log").hide();
+            } else {
+                $("#btn_show_log").css("display", "inline");
+                $("#btn_share_info").hide();
+            }
         } else {
             $("#optBtns").hide();
+            $("#btn_share_info").hide();
+            $("#btn_share_to_me_info").hide();
+            $("#btn_show_log").hide();
         }
     }
-
 
     // 上传按钮单击____打开模态框，等待用户输入文件名及选择文件
     $("#btnUpload").click(function () {
@@ -131,14 +155,14 @@ $(document).ready(function () {
                 alert("download folder " + $(this).children("[name='fId']").val() + "不能下载文件夹");
             } else {
                 // 多文件下载待开发
-                downloadFile(getFolderId(), $(this).children("[name='fId']").val());
+                downloadFile($(this).children("[name='folderId']").val(), $(this).children("[name='fId']").val());
             }
         });
     });
 
     // 粘贴按钮单击
     $("#btnPaste").click(function () {
-        let f = path[path.length - 1];
+        const f = path[path.length - 1];
         moveFile(f.id, optFileIdList);
         optFileIdList = [];
         $("#btnPaste").hide();
@@ -154,20 +178,23 @@ $(document).ready(function () {
 
     // 新建文件夹模态框提交按钮单击____ajax上传数据
     $("#btnNewFolderSubmit").click(function () {
-        let data = JSON.stringify({
-                folderId: getFolderId(),
-                fileName: $("#foldername").val()
+        const data = JSON.stringify({
+            folderId: getFolderId(),
+            fileName: $("#foldername").val(),
+            userId: folderCreatorUserId,
         });
         createFolder(data);
         $("#setFolderInfoModal").modal('hide');
     });
 
-    // 更多操作下拉菜单中  重命名按钮  单击
+    // 更多操作下拉菜单中 重命名按钮 单击
     $("#other_menu_set_name").click(function () {
         if ($(".file-opt").length === 1) {
-            let fId = $(".file-opt").children("[name='fId']").val();
-            let fName = prompt("请输入文件（夹）名称:");
-            setFileName(fId, fName);
+            const fId = $(".file-opt").children("[name='fId']").val();
+            const fName = prompt("请输入文件（夹）名称:");
+            if (fName.trim().length > 0) {
+                setFileName(fId, fName);
+            }
         } else if ($(".file-opt").length === 0) {
             alert("请选中需要重命名的文件（夹）。");
         } else {
@@ -175,8 +202,9 @@ $(document).ready(function () {
         }
     });
 
-    // 更多操作下拉菜单中  移动按钮  单击
+    // 更多操作下拉菜单中 移动按钮 单击
     $("#other_menu_move_file").click(function () {
+        optFileIdList = [];
         $(".file-opt").each(function () {
             optFileIdList.push(Number($(this).children("[name='fId']").val()));
         });
@@ -184,10 +212,10 @@ $(document).ready(function () {
         $("#btnPaste").css("display", "inline");
     });
 
-    // 更多操作下拉菜单中  详情按钮  单击
+    // 更多操作下拉菜单中 详情按钮 单击
     $("#other_menu_get_info").click(function () {
         if ($(".file-opt").length === 1) {
-            let fId = $(".file-opt").children("[name='fId']").val();
+            const fId = $(".file-opt").children("[name='fId']").val();
             getInfo(fId);
         } else if ($(".file-opt").length === 0) {
             alert("请选中需要查看详情的文件（夹）。");
@@ -196,10 +224,12 @@ $(document).ready(function () {
         }
     });
 
-    // 更多操作下拉菜单中  分享按钮  单击
+    // 更多操作下拉菜单中 分享按钮 单击
     $("#other_menu_share_file").click(function () {
         if ($(".file-opt").length === 1) {
-            $("#showShareModal").modal('show');
+            $("#share_file_id").val($(".file-opt").find("[name='fId']").first().val());
+            $("#share_folder_id").val(getFolderId());
+            $("#show_share_modal").modal('show');
         } else {
             alert("一次只能分享一个文件（夹）");
         }
@@ -210,8 +240,8 @@ $(document).ready(function () {
        const shareInfo = {
            username: $("#share_user").val(),
            shareUserRole: Number($("#share_user_role").val()),
-           fileId: Number($(".file-opt").find("[name='fId']").first().val()),
-           folderId: getFolderId(),
+           fileId: Number($("#share_file_id").val()),
+           folderId: Number($("#share_folder_id").val()),
        };
        if (shareInfo.username.trim().length === 0) {
            $("#share_user").focus();
@@ -232,17 +262,26 @@ $(document).ready(function () {
         }
     });
 
-    // 返回按钮单击
+    // 返回按钮 单击
     $("#btnReverse").click(function () {
         if (path.length > 1) {
             path.pop();
-            let f = path.pop();
-            getFlist(f.id, f.name);
+            const f = path.pop();
+            if (activePage !== 'all_file' && Number(f.id) === 0) {
+                $("#loading").css("display", "inline");
+                getFileVoListByShare();
+                path.push(newFloder(f.id, f.name));
+            } else {
+                getFlist(f.id, f.name);
+            }
         }
+        setShareToMeMenu();
+        $("#optBtns").hide();
     });
 
     // 鼠标点击文件路径中的一项
     $("#file_path_inner").on("click", "a", function () {
+        $("#loading").css("display", "inline");
         let id = $(this).attr("name");
         while (true) {
             let f = path.pop();
@@ -253,7 +292,14 @@ $(document).ready(function () {
                 break;
             }
         }
-        getFlist(id, $(this).text());
+        if (activePage !== 'all_file' && Number(id) === 0) {
+            getFileVoListByShare();
+            path.push(newFloder(id, $(this).text()));
+        } else {
+            getFlist(id, $(this).text());
+        }
+        setShareToMeMenu();
+        $("#optBtns").hide();
     });
 
     // 鼠标单击文件项
@@ -264,11 +310,28 @@ $(document).ready(function () {
     // 鼠标双击文件项
     $("#main_right_content").on("dblclick", ".file-item", function () {
         if ($(this).children().eq(1).val() === "true") {
+            folderCreatorUserId = Number($(this).children("[name='userId']").val());
+            $("#input_user_id").val(folderCreatorUserId);
             getFlist($(this).children().eq(0).val(), $(this).children().eq(-1).text());
+            setShareToMeMenu();
+            showOtherMenu(true);
         } else {
             alert("不能在云端打开文件。");
         }
     });
+
+    function setShareToMeMenu() {
+        if (activePage === 'share_to_me') {
+            if (getFolderId() === 0) {
+                $("#main_right_file_nav").hide();
+                $("#main_right_share_to_me_nav").css("display", "inline");
+                $("#btnPaste").hide();
+            } else {
+                $("#main_right_file_nav").css("display", "inline");
+                $("#main_right_share_to_me_nav").hide();
+            }
+        }
+    }
 
     // 鼠标移至文件项上方
     $("#main_right_content").on("mouseover", ".file-item", function () {
@@ -278,6 +341,58 @@ $(document).ready(function () {
     // 鼠标离开文件项上方
     $("#main_right_content").on("mouseout", ".file-item", function () {
         $(this).removeClass("file-focus");
+    });
+
+    // 我的分享页面 详情按钮 单击
+    $("#btn_share_info").click(function () {
+        if ($(".file-opt").length === 1) {
+            const fileId = $(".file-opt").children("[name='fId']").val();
+            const folderId = $(".file-opt").children("[name='folderId']").val();
+            getFileShareVoListByFile(fileId, folderId);
+            $("#share_info_modal").modal('show');
+        } else if ($(".file-opt").length === 0) {
+            alert("请选中需要查看详情的文件（夹）。");
+        } else {
+            alert("无法同时查看多个文件（夹）详情。");
+        }
+    });
+
+    $("#file_share_list").on("click", ".btn-edit-share", function () {
+        $("#share_user").val($(this).attr("username"));
+        $("#share_user_role").val($(this).attr("shareUserRole"));
+        $("#share_file_id").val($(this).attr("fileId"));
+        $("#share_folder_id").val($(this).attr("folderId"));
+        $("#show_share_modal").modal('show');
+    });
+
+    $("#file_share_list").on("click", ".btn-delete-share", function () {
+        if (window.confirm("确认删除该条分享？")) {
+            deleteFileShare([{
+                shareUser: Number($(this).attr("shareUser")),
+                fileId: Number($(this).attr("fileId")),
+                folderId: Number($(this).attr("folderId")),
+            }]);
+        }
+    });
+
+    $("#btn_add_share").click(function () {
+        $("#share_file_id").val($(this).attr("fileId"));
+        $("#share_folder_id").val($(this).attr("folderId"));
+        $("#show_share_modal").modal('show');
+    });
+
+    $("#btn_delete_share").click(function () {
+        if (window.confirm("确认删除该分享？")) {
+            const fileShareIdList = [];
+            $(".btn-delete-share").each(function () {
+                fileShareIdList.push({
+                    shareUser: Number($(this).attr("shareUser")),
+                    fileId: Number($(this).attr("fileId")),
+                    folderId: Number($(this).attr("folderId")),
+                });
+            });
+            deleteFileShare(fileShareIdList);
+        }
     });
 
     // 设置文件路径
@@ -303,6 +418,20 @@ $(document).ready(function () {
         }
     };
 
+    // 我的分享页面 日志按钮 单击
+    $("#btn_show_log").click(function () {
+        if ($(".file-opt").length === 1) {
+            const fileId = $(".file-opt").children("[name='fId']").val();
+            const folderId = $(".file-opt").children("[name='folderId']").val();
+            getLog(Number(fileId), Number(folderId));
+            $("#log_info_modal").modal('show');
+        } else if ($(".file-opt").length === 0) {
+            alert("请选中需要查看详情的文件（夹）。");
+        } else {
+            alert("无法同时查看多个文件（夹）详情。");
+        }
+    });
+
     // 设置文件目录
     function setFileList(data) {
         setFilePath();
@@ -317,6 +446,8 @@ $(document).ready(function () {
             } else {
                 htmlStr += "<input type='hidden' value='" + item.fileId + "' name='fId'><input type='hidden' value='" + fIsFolder + "' name='fIsFolder'><span class='fa fa-file-o file-icon'></span>";
             }
+            htmlStr += "<input type='hidden' value='" + item.folderId + "' name='folderId'>";
+            htmlStr += "<input type='hidden' value='" + item.userId + "' name='userId'>";
             htmlStr += "<p>" + item.fileName + "</p></div>";
         });
         $("#main_right_content").append(htmlStr);
@@ -324,7 +455,11 @@ $(document).ready(function () {
 
     function getFileIdList(folderId) {
         $.ajax({
-            url: "/cloud/fileid",
+            url: {
+                all_file: "/cloud/fileid",
+                my_share: "/cloud/fileid",
+                share_to_me: "/share/get_file_id/by_folder_id",
+            }[activePage],
             data: JSON.stringify({
                 folderId: folderId
             }),
@@ -377,27 +512,23 @@ $(document).ready(function () {
                 alert("ajax error");
             }
         });
-
-
     }
 
     // 获取文件目录
     function getFlist(folderId, fName) {
-        $("#loading").show();
+        $("#loading").css("display", "inline");
         path.push(newFloder(folderId, fName));
         getFileIdList(folderId);
     }
 
     // 获取分享列表
     function getShareList() {
-        $("#main_right_content").empty();
-        $("#main_right_content").append("<div class='text-center'><h4>此功能尚未开放，敬请期待！</h4></div>");
+        getFileVoListByShare();
     }
 
     // 获取分享给我的列表
     function getShareToMeList() {
-        $("#main_right_content").empty();
-        $("#main_right_content").append("<div class='text-center'><h4>111</h4></div>");
+        getFileVoListByShare();
     }
 
     // 获取关于信息
@@ -408,9 +539,12 @@ $(document).ready(function () {
 
     // 创建文件夹
     function createFolder(data) {
-        $("#loading").show();
+        $("#loading").css("display", "inline");
         $.ajax({
-            url: "/cloud/createFolder",
+            url: {
+                all_file: "/cloud/create_folder",
+                share_to_me: "/share/create_folder",
+            }[activePage],
             data: data,
             type: "post",
             dataType: "json",
@@ -434,9 +568,12 @@ $(document).ready(function () {
 
     //上传文件
     function uploadFile(data) {
-        $("#loading").show();
+        $("#loading").css("display", "inline");
         $.ajax({
-            url: "/cloud/upload",
+            url: {
+                all_file: "/cloud/upload",
+                share_to_me: "/share/upload",
+            }[activePage],
             data: data,
             cache: false,
             processData: false,
@@ -479,13 +616,17 @@ $(document).ready(function () {
 
     // 重命名
     function setFileName(fileId, fileName) {
-        $("#loading").show();
+        $("#loading").css("display", "inline");
         $.ajax({
-            url: "/cloud/update",
+            url: {
+                all_file: "/cloud/update",
+                share_to_me: "/share/rename",
+            }[activePage],
             data: JSON.stringify({
                 fileId: fileId,
                 fileName: fileName,
-                folderId: path[path.length-1].id
+                folderId: path[path.length-1].id,
+                userId: folderCreatorUserId,
             }),
             type: "post",
             dataType: "json",
@@ -509,12 +650,16 @@ $(document).ready(function () {
 
     // 删除文件（夹）（fileIdList）
     function delFile(fileIdList) {
-        $("#loading").show();
+        $("#loading").css("display", "inline");
         $.ajax({
-            url: "/cloud/delete",
+            url: {
+                all_file: "/cloud/delete",
+                share_to_me: "/share/delete_file",
+            }[activePage],
             data: JSON.stringify({
                 fileIdList: fileIdList,
                 folderId: getFolderId(),
+                userId: folderCreatorUserId,
             }),
             type: "post",
             dataType: "json",
@@ -538,13 +683,17 @@ $(document).ready(function () {
 
     // 移动文件（newFloderId, fileIdList）目的文件夹Id，及移动文件（夹）序列
     function moveFile(newFloderId, fileIdList) {
-        $("#loading").show();
+        $("#loading").css("display", "inline");
         $.ajax({
-            url: "/cloud/move",
+            url: {
+                all_file: "/cloud/move",
+                share_to_me: "/share/move",
+            }[activePage],
             data: JSON.stringify({
                 folderId: folderId,
                 newFolderId: Number(newFloderId),
-                fileIdList: fileIdList
+                fileIdList: fileIdList,
+                userId: folderCreatorUserId,
             }),
             type: "post",
             dataType: "json",
@@ -569,7 +718,7 @@ $(document).ready(function () {
 
     // 获取文件信息（fId）
     function getInfo(fileId) {
-        $("#loading").show();
+        $("#loading").css("display", "inline");
         $.ajax({
             url: "/cloud/byfileid",
             data: JSON.stringify({
@@ -585,7 +734,7 @@ $(document).ready(function () {
                     showInfo(result.data[0]);
                 } else {
                     alert(result.info + '   [' + result.state + ']');
-                }x
+                }
                 $("#loading").hide();
             },
             error: function () {
@@ -611,7 +760,7 @@ $(document).ready(function () {
     }
 
     function getUserInfo() {
-        $("#loading").show();
+        $("#loading").css("display", "inline");
         $.ajax({
             url: "/user/",
             data: {},
@@ -656,6 +805,132 @@ $(document).ready(function () {
         });
     }
 
+    function getFileVoListByShare() {
+        $.ajax({
+            url: {
+                my_share: "/share/my",
+                share_to_me: "/share/to_me",
+            }[activePage],
+            type: "post",
+            dataType: "json",
+            contentType: "application/json;charset=UTF-8",
+            async: true,
+            success: function (result) {
+                if (result.state === 0) {
+                    $("#main_right_content").empty();
+                    setFileList(result.data);
+                } else {
+                    alert(result.info + '   [' + result.state + ']');
+                }
+                $("#loading").hide();
+            },
+            error: function () {
+                $("#loading").hide();
+                alert("ajax error");
+            }
+        });
+    }
+
+    function getFileShareVoListByFile(fileId, folderId) {
+        $.ajax({
+            url: "/share/my/by_file",
+            data: JSON.stringify({
+                fileId,
+                folderId,
+            }),
+            type: "post",
+            dataType: "json",
+            contentType: "application/json;charset=UTF-8",
+            async: true,
+            success: function (result) {
+                if (result.state === 0) {
+                    $("#file_share_list").empty();
+                    result.data.forEach((item) => {
+                        $("#file_share_list").append(`
+                            <tr>
+                                <td>${item.shareUsername}</td>
+                                <td>${item.shareUserRoleStr}</td>
+                                <td>
+                                    <button type="button" class="btn btn-primary btn-edit-share" username="${item.shareUsername}" shareUserRole="${item.shareUserRole}" fileId="${item.fileId}" folderId="${item.folderId}">修改</button>
+                                    <button type="button" class="btn btn-danger btn-delete-share" shareUser="${item.shareUser}" fileId="${item.fileId}" folderId="${item.folderId}">删除</button>
+                                </td>
+                            </tr>
+                        `);
+                        $("#btn_add_share").attr("fileId", item.fileId);
+                        $("#btn_add_share").attr("folderId", item.folderId);
+                    })
+                } else {
+                    alert(result.info + '   [' + result.state + ']');
+                }
+                $("#loading").hide();
+            },
+            error: function () {
+                $("#loading").hide();
+                alert("ajax error");
+            }
+        });
+    }
+
+    function deleteFileShare(fileShareIdList) {
+        $.ajax({
+            url: "/share/delete",
+            data: JSON.stringify(fileShareIdList),
+            type: "post",
+            dataType: "json",
+            contentType: "application/json;charset=UTF-8",
+            async: true,
+            success: function (result) {
+                if (result.state === 0) {
+                    getFileVoListByShare();
+                    modalHide();
+                    alert(result.info);
+                } else {
+                    alert(result.info + '   [' + result.state + ']');
+                }
+                $("#loading").hide();
+            },
+            error: function () {
+                $("#loading").hide();
+                alert("ajax error");
+            }
+        });
+    }
+
+    function getLog(fileId, folderId) {
+        $.ajax({
+            url: "/log/by_file",
+            data: JSON.stringify({
+                fileId,
+                folderId,
+            }),
+            type: "post",
+            dataType: "json",
+            contentType: "application/json;charset=UTF-8",
+            async: true,
+            success: function (result) {
+                if (result.state === 0) {
+                    $("#log_list").empty();
+                    result.data.forEach((item) => {
+                        $("#log_list").append(`
+                            <tr>
+                                <td>${item.shareUsername}</td>
+                                <td>${item.logContent}</td>
+                                <td>${new Date(item.createTime).toLocaleString()}</td>
+                            </tr>
+                        `);
+                    })
+                } else {
+                    alert(result.info + '   [' + result.state + ']');
+                }
+                $("#loading").hide();
+            },
+            error: function () {
+                $("#loading").hide();
+                alert("ajax error");
+            }
+        });
+    }
+
     // 构建文件夹对象
     function newFloder(id, name) {
         const folder = {};
@@ -671,9 +946,7 @@ $(document).ready(function () {
 
 // 关闭模态框
 function modalHide() {
-    $("#uploadModal").modal('hide');
-    $("#setFolderInfoModal").modal('hide');
-    $("#showInfoModal").modal('hide');
-    $("#showShareModal").modal('hide');
+    $(".modal").modal('hide');
     $("#file_info").empty();
+    $("#share_user").val();
 }
