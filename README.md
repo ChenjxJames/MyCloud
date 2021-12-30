@@ -24,10 +24,10 @@
 | 字段名 | 类型 | 长度 | 约束 | 备注 |
 | --- | --- | --- | --- | --- |
 | user_id |	INT	|  | 主键 | 用户id,自增 |
-| user_name	| VARCHAR | 64 | 非空、唯一 | |
-| user_password	| BINARY | 16 | 非空	| |
-| user_email | INT | 255 | 非空、唯一 | |
-| user_phone | CHAR | 11 | | |		
+| user_name	| VARCHAR | 64 | 非空、唯一 | 用户名 |
+| user_password	| BINARY | 16 | 非空	| 用户密码 |
+| user_email | INT | 255 | 非空、唯一 | 用户邮箱 |
+| user_phone | CHAR | 11 | | 用户手机号 |		
 | create_time | DATETIME | | 非空 | 创建时间，自动生成 |
 
 #### 文件信息表 file
@@ -51,7 +51,8 @@
 #### 文件分享信息表 file_share
 | 字段名 | 类型 | 长度 | 约束 | 备注 |
 | --- | --- | --- | --- | --- |
-| file_id | INT	| |非空，文件表file的外键，与share_user、create_user一同为主键	| 文件id |
+| folder_id | INT	| |非空，文件表file的外键，与file_id、share_user、create_user一同为主键	| 所属文件夹id |
+| file_id | INT	| |非空，文件表file的外键，与folder_id、share_user、create_user一同为主键	| 文件id |
 | share_user | INT | | 非空，用户表user的外键 | 被分享者的用户id |
 | share_user_role | INT | | 非空 | 被分享用户的角色（0仅查看，1编辑者，2管理员）|
 | create_user | INT	| | 非空，用户表user的外键 | 分享者的用户id |
@@ -60,9 +61,12 @@
 #### 日志信息表 log
 | 字段名 | 类型 | 长度 | 约束 | 备注 |
 | --- | --- | --- | --- | --- |
-| log_id | INT	| |非空，主键	| 日志id |
+| log_id | INT	| |非空，主键	| 日志id，自增 |
+| folder_id | INT	| |非空，文件表file的外键	| 所属文件夹编号 |
+| file_id | INT	| | 非空，文件表file的外键	| 文件编号 |
+| share_user | INT	| | 非空，用户表user的外键	| 被分享者用户编号 |
+| file_creator_user | INT	| | 非空，用户表user的外键 | 创建者用户编号 |
 | log_content | VARCHAR | 255 | 非空 | 日志内容 |
-| user_id | INT	| | 非空，用户表user的外键 | 用户id |
 | create_time | DATETIME | | 非空 | 创建时间，自动生成 |
 
 ### 运行效果
